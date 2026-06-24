@@ -318,12 +318,80 @@
       bottom: 10%; left: -150px;
     }
 
+    /* ── Lang toggle ── */
+    .lang-toggle {
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--accent3); font-family: 'Space Mono', monospace;
+      font-size: 12px; letter-spacing: 2px; padding: 6px 14px;
+      border-radius: 100px; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lang-toggle:hover { border-color: var(--accent3); background: rgba(106,255,218,0.08); }
+
+    /* ── Projects ── */
+    #projects { padding: 0 10vw; flex-direction: column; align-items: flex-start; justify-content: center; }
+    .projects-header { margin-bottom: 64px; }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px; width: 100%;
+    }
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    }
+    .project-card:hover {
+      border-color: rgba(124,106,255,0.4);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(124,106,255,0.12);
+    }
+    .project-thumb {
+      height: 180px; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .project-thumb-label {
+      position: absolute; top: 14px; left: 14px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; letter-spacing: 3px;
+      color: rgba(255,255,255,0.5);
+    }
+    .project-thumb-ui {
+      width: 80%; padding: 8px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);
+    }
+    .mock-bar { height: 6px; background: rgba(255,255,255,0.15); border-radius: 3px; margin-bottom: 8px; }
+    .mock-row { display: flex; gap: 6px; margin-bottom: 6px; }
+    .mock-cell { height: 5px; background: rgba(255,255,255,0.1); border-radius: 2px; }
+    .mock-cell.w20 { width: 20%; }
+    .mock-cell.w30 { width: 30%; }
+    .mock-cell.w40 { width: 40%; }
+    .mock-cell.w50 { width: 50%; }
+    .mock-cell.w60 { width: 60%; }
+    .mock-cell.w70 { width: 70%; }
+    .mock-map { height: 40px; background: rgba(255,255,255,0.07); border-radius: 4px; margin-bottom: 6px; }
+    .mock-chat { display: flex; flex-direction: column; gap: 6px; padding: 4px; }
+    .mock-bubble { height: 8px; border-radius: 4px; background: rgba(255,255,255,0.15); }
+    .mock-bubble.left { width: 60%; align-self: flex-start; }
+    .mock-bubble.right { width: 45%; align-self: flex-end; background: rgba(124,106,255,0.4); }
+    .mock-flow { display: flex; align-items: center; gap: 4px; justify-content: center; padding: 8px 0; }
+    .mock-node { width: 20px; height: 20px; border-radius: 6px; background: rgba(255,255,255,0.2); }
+    .mock-arrow { color: rgba(255,255,255,0.3); font-size: 12px; }
+    .project-body { padding: 20px 24px 24px; }
+    .project-title { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
+    .project-desc { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
+    .project-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
     @media (max-width: 768px) {
       nav { padding: 16px 24px; }
       .nav-links { display: none; }
       #hero, #about, #skills, #work, #contact { padding: 0 6vw; }
       .about-grid { grid-template-columns: 1fr; gap: 48px; }
       .timeline-item { grid-template-columns: 1fr; gap: 8px; }
+      .projects-grid { grid-template-columns: 1fr; }
       footer { flex-direction: column; gap: 8px; text-align: center; }
     }
   </style>
@@ -341,24 +409,26 @@
 <nav>
   <div class="logo">// FELIX.DEV</div>
   <div class="nav-links">
-    <a href="#about">About</a>
-    <a href="#skills">Skills</a>
-    <a href="#work">Work</a>
-    <a href="#contact">Contact</a>
+    <a href="#about"><span data-zh="关于" data-en="About">关于</span></a>
+    <a href="#skills"><span data-zh="技能" data-en="Skills">技能</span></a>
+    <a href="#projects"><span data-zh="项目" data-en="Projects">项目</span></a>
+    <a href="#work"><span data-zh="经历" data-en="Work">经历</span></a>
+    <a href="#contact"><span data-zh="联系" data-en="Contact">联系</span></a>
   </div>
+  <button class="lang-toggle" id="langToggle">EN</button>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
-  <div class="hero-eyebrow">Welcome to my universe</div>
+  <div class="hero-eyebrow" data-zh="你好，我是一名全栈开发者" data-en="Hi, I'm a Full-Stack Developer">你好，我是一名全栈开发者</div>
   <h1 class="hero-name">Felix<br/>Liu.</h1>
   <p class="hero-sub">
-    全栈开发者 · 创意编程爱好者 · 把代码写成诗的人。<br/>
-    Building digital experiences at the intersection of art &amp; engineering.
+    <span data-zh="专注构建 AI 驱动的 Web 产品。" data-en="Focused on building AI-powered Web products.">专注构建 AI 驱动的 Web 产品。</span><br/>
+    <span data-zh="做过电商 ERP、物流平台、金融 AI Agent，解决真实的业务问题。" data-en="Built e-commerce ERP, logistics platforms, finance AI agents — solving real business problems.">做过电商 ERP、物流平台、金融 AI Agent，解决真实的业务问题。</span>
   </p>
   <div class="hero-cta">
-    <a href="#work" class="btn btn-primary">View My Work</a>
-    <a href="#contact" class="btn btn-ghost">Say Hello →</a>
+    <a href="#projects" class="btn btn-primary"><span data-zh="查看项目案例" data-en="View Projects">查看项目案例</span></a>
+    <a href="#contact" class="btn btn-ghost"><span data-zh="联系我 →" data-en="Say Hello →">联系我 →</span></a>
   </div>
   <div class="scroll-hint">
     <span>Scroll</span>
@@ -370,31 +440,31 @@
 <section id="about">
   <div class="about-grid reveal">
     <div class="about-left">
-      <div class="section-label">// 关于我</div>
-      <h2 class="section-title">Curious<br/>by nature.</h2>
+      <div class="section-label">// <span data-zh="关于我" data-en="About Me">关于我</span></div>
+      <h2 class="section-title"><span data-zh="用代码解决<br/>真实问题。" data-en="Building things<br/>that matter.">用代码解决<br/>真实问题。</span></h2>
       <p class="about-text">
-        我相信最好的产品诞生于技术与美学的交汇处。白天写代码，深夜思考宇宙。热爱用一行行字符构建出能让人感动的体验。
+        <span data-zh="5 年全栈开发经验，擅长从 0 到 1 快速构建产品。相信个人网站不只是展示简历，而是让别人快速理解你的能力和价值。" data-en="5 years of full-stack experience, good at building products from 0 to 1. A personal site isn't a resume — it's proof of what you can actually do.">5 年全栈开发经验，擅长从 0 到 1 快速构建产品。相信个人网站不只是展示简历，而是让别人快速理解你的能力和价值。</span>
       </p>
       <p class="about-text" style="margin-top:12px;">
-        目前专注于 Web 全栈开发、创意编码和 AI 应用探索。不写代码的时候，在咖啡馆里读书或者半山腰看日落。
+        <span data-zh="目前专注于 AI 应用开发、Web 全栈和自动化工具。不写代码的时候，在研究硬件或者看日落。" data-en="Currently focused on AI app development, full-stack web, and automation tools. When not coding, tinkering with hardware or watching sunsets.">目前专注于 AI 应用开发、Web 全栈和自动化工具。不写代码的时候，在研究硬件或者看日落。</span>
       </p>
     </div>
     <div class="about-right">
       <div class="stat-card">
         <div class="stat-number">5+</div>
-        <div class="stat-label">年开发经验</div>
+        <div class="stat-label" data-zh="年开发经验" data-en="Years Experience">年开发经验</div>
       </div>
       <div class="stat-card">
         <div class="stat-number">30+</div>
-        <div class="stat-label">完成项目</div>
+        <div class="stat-label" data-zh="完成项目" data-en="Projects Shipped">完成项目</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">10+</div>
+        <div class="stat-label" data-zh="服务客户" data-en="Clients Served">服务客户</div>
       </div>
       <div class="stat-card">
         <div class="stat-number">∞</div>
-        <div class="stat-label">咖啡因摄入</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-number">01</div>
-        <div class="stat-label">地球上的你</div>
+        <div class="stat-label" data-zh="咖啡因摄入" data-en="Caffeine Intake">咖啡因摄入</div>
       </div>
     </div>
   </div>
@@ -423,6 +493,82 @@
     <div class="skill-pill"><span>🎵 Web Audio API</span></div>
     <div class="skill-pill"><span>✨ GSAP</span></div>
     <div class="skill-pill"><span>🧠 Prompt Engineering</span></div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="projects-header reveal">
+    <div class="section-label">// <span data-zh="项目案例" data-en="Projects">项目案例</span></div>
+    <h2 class="section-title"><span data-zh="做过什么，<br/>解决了什么。" data-en="What I've built,<br/>what it solved.">做过什么，<br/>解决了什么。</span></h2>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card reveal">
+      <div class="project-thumb" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 70%, #533483 100%);">
+        <div class="project-thumb-label">ERP SYSTEM</div>
+        <div class="project-thumb-ui">
+          <div class="mock-bar"></div>
+          <div class="mock-row"><div class="mock-cell w60"></div><div class="mock-cell w30"></div></div>
+          <div class="mock-row"><div class="mock-cell w40"></div><div class="mock-cell w50"></div></div>
+          <div class="mock-row"><div class="mock-cell w70"></div><div class="mock-cell w20"></div></div>
+        </div>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title" data-zh="电商智能客服 ERP" data-en="E-commerce AI Customer Service ERP">电商智能客服 ERP</h3>
+        <p class="project-desc" data-zh="为中大型电商团队打造的客服工作台，集成 LLM 自动回复、工单管理和数据看板，将客服效率提升 60%。" data-en="Customer service workstation for mid-large e-commerce teams, integrating LLM auto-reply, ticket management and data dashboards — boosted efficiency by 60%.">为中大型电商团队打造的客服工作台，集成 LLM 自动回复、工单管理和数据看板，将客服效率提升 60%。</p>
+        <div class="project-tags">
+          <span class="tag">React</span><span class="tag">Node.js</span><span class="tag">LLM</span><span class="tag">PostgreSQL</span>
+        </div>
+      </div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-thumb" style="background: linear-gradient(135deg, #0d1b2a 0%, #1b4332 40%, #2d6a4f 70%, #52b788 100%);">
+        <div class="project-thumb-label">LOGISTICS</div>
+        <div class="project-thumb-ui">
+          <div class="mock-bar"></div>
+          <div class="mock-map"></div>
+          <div class="mock-row"><div class="mock-cell w50"></div><div class="mock-cell w40"></div></div>
+        </div>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title" data-zh="海外物流货运平台" data-en="Cross-border Logistics Platform">海外物流货运平台</h3>
+        <p class="project-desc" data-zh="服务于东南亚跨境物流公司，支持多货币结算、实时追踪和自动化报关，月均处理订单 10 万+。" data-en="Serving Southeast Asian cross-border logistics companies — multi-currency billing, real-time tracking, automated customs, 100k+ orders/month.">服务于东南亚跨境物流公司，支持多货币结算、实时追踪和自动化报关，月均处理订单 10 万+。</p>
+        <div class="project-tags">
+          <span class="tag">Vue3</span><span class="tag">FastAPI</span><span class="tag">Redis</span><span class="tag">Docker</span>
+        </div>
+      </div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-thumb" style="background: linear-gradient(135deg, #1a0533 0%, #3c0d6b 40%, #6a0dad 70%, #c77dff 100%);">
+        <div class="project-thumb-label">AI AGENT</div>
+        <div class="project-thumb-ui">
+          <div class="mock-chat"><div class="mock-bubble left"></div><div class="mock-bubble right"></div><div class="mock-bubble left"></div></div>
+        </div>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title" data-zh="金融数据 AI Agent" data-en="Finance Data AI Agent">金融数据 AI Agent</h3>
+        <p class="project-desc" data-zh="基于 LangChain 构建的金融分析助手，支持自然语言查询财报数据、生成投资摘要，已服务 3 家资管机构。" data-en="LangChain-based finance analysis assistant — natural language queries over financial data, generates investment summaries, serving 3 asset management firms.">基于 LangChain 构建的金融分析助手，支持自然语言查询财报数据、生成投资摘要，已服务 3 家资管机构。</p>
+        <div class="project-tags">
+          <span class="tag">Python</span><span class="tag">LangChain</span><span class="tag">GPT-4</span><span class="tag">FastAPI</span>
+        </div>
+      </div>
+    </div>
+    <div class="project-card reveal">
+      <div class="project-thumb" style="background: linear-gradient(135deg, #1a1200 0%, #3d2b00 40%, #7b5800 70%, #ffd60a 100%);">
+        <div class="project-thumb-label">AUTOMATION</div>
+        <div class="project-thumb-ui">
+          <div class="mock-bar"></div>
+          <div class="mock-flow"><div class="mock-node"></div><div class="mock-arrow">→</div><div class="mock-node"></div><div class="mock-arrow">→</div><div class="mock-node"></div></div>
+        </div>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title" data-zh="内容自动发布工具" data-en="Content Auto-publish Tool">内容自动发布工具</h3>
+        <p class="project-desc" data-zh="一键将文章发布到微信公众号、小红书、知乎等多平台，支持定时发布和数据追踪，累计发布内容 5 万+。" data-en="One-click publishing to WeChat, Xiaohongshu, Zhihu and more — scheduled posting, analytics, 50k+ pieces published.">一键将文章发布到微信公众号、小红书、知乎等多平台，支持定时发布和数据追踪，累计发布内容 5 万+。</p>
+        <div class="project-tags">
+          <span class="tag">Next.js</span><span class="tag">Puppeteer</span><span class="tag">Cron</span><span class="tag">AWS</span>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -595,6 +741,21 @@
   }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
 
   reveals.forEach(el => observer.observe(el));
+
+  // ── Language toggle ──
+  const langBtn = document.getElementById('langToggle');
+  let isEN = false;
+  langBtn.addEventListener('click', () => {
+    isEN = !isEN;
+    langBtn.textContent = isEN ? 'ZH' : 'EN';
+    document.querySelectorAll('[data-zh]').forEach(el => {
+      if (el.tagName === 'SPAN' || el.tagName === 'DIV' || el.tagName === 'P' || el.tagName === 'H2' || el.tagName === 'H3') {
+        el.innerHTML = isEN ? el.dataset.en : el.dataset.zh;
+      } else {
+        el.textContent = isEN ? el.dataset.en : el.dataset.zh;
+      }
+    });
+  });
 </script>
 </body>
 </html>
