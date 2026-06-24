@@ -277,7 +277,62 @@
       box-shadow: 0 8px 24px rgba(124,106,255,0.2);
     }
 
-    /* ── Footer ── */
+    /* ── Contact Form ── */
+    .contact-form {
+      width: 100%; max-width: 480px;
+      display: flex; flex-direction: column; gap: 14px;
+      margin-bottom: 40px;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-input, .form-textarea {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--muted); }
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(124,106,255,0.12);
+    }
+    .form-textarea { resize: vertical; min-height: 120px; }
+    .form-submit {
+      padding: 14px 36px; border-radius: 100px;
+      background: var(--accent); color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px; font-weight: 500;
+      border: none; cursor: pointer;
+      box-shadow: 0 0 24px rgba(124,106,255,0.4);
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      align-self: flex-start;
+    }
+    .form-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(124,106,255,0.6);
+    }
+    .form-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .form-status {
+      font-size: 14px; padding: 12px 18px;
+      border-radius: 10px; display: none;
+    }
+    .form-status.success {
+      display: block;
+      background: rgba(106,255,218,0.08);
+      border: 1px solid rgba(106,255,218,0.2);
+      color: var(--accent3);
+    }
+    .form-status.error {
+      display: block;
+      background: rgba(255,106,106,0.08);
+      border: 1px solid rgba(255,106,106,0.2);
+      color: #ff6a6a;
+    }
     footer {
       position: relative; z-index: 1;
       padding: 32px 10vw;
@@ -619,15 +674,22 @@
 <section id="contact">
   <div class="reveal">
     <h2 class="contact-title">Let's build<br/>something.</h2>
-    <p class="contact-sub">有想法想聊？或者只是想说声 hello？我的收件箱永远对你开放。</p>
-    <a href="mailto:alex@example.com" class="btn btn-primary" style="margin-bottom:40px; font-size:16px; padding:16px 40px;">
-      Send a message ✉️
-    </a>
+    <p class="contact-sub">有想法想聊？或者只是想说声 hello？填写下面的表单，我会尽快回复你。</p>
+    <form class="contact-form" id="contactForm">
+      <div class="form-row">
+        <input class="form-input" type="text" name="name" placeholder="你的名字" required />
+        <input class="form-input" type="email" name="email" placeholder="邮箱地址" required />
+      </div>
+      <input class="form-input" type="text" name="subject" placeholder="主题" />
+      <textarea class="form-textarea" name="message" placeholder="留下你想说的话..." required></textarea>
+      <button class="form-submit" type="submit" id="submitBtn">发送消息 ✉️</button>
+      <div class="form-status" id="formStatus"></div>
+    </form>
     <div class="social-row">
       <a href="#" class="social-btn" title="GitHub">⌨️</a>
       <a href="#" class="social-btn" title="Twitter">🐦</a>
       <a href="#" class="social-btn" title="LinkedIn">💼</a>
-      <a href="#" class="social-btn" title="Dribbble">🎨</a>
+      <a href="#" class="social-btn" title="WeChat">💬</a>
     </div>
   </div>
 </section>
@@ -742,7 +804,38 @@
 
   reveals.forEach(el => observer.observe(el));
 
-  // ── Language toggle ──
+  // ── Contact Form ──
+  const contactForm = document.getElementById('contactForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const formStatus = document.getElementById('formStatus');
+
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    submitBtn.textContent = '发送中...';
+    formStatus.className = 'form-status';
+
+    const data = new FormData(contactForm);
+    try {
+      const res = await fetch('https://formspree.io/f/xpwrjqoy', {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        formStatus.className = 'form-status success';
+        formStatus.textContent = '✓ 消息已发送！我会尽快回复你。';
+        contactForm.reset();
+      } else {
+        throw new Error('发送失败');
+      }
+    } catch {
+      formStatus.className = 'form-status error';
+      formStatus.textContent = '✗ 发送失败，请稍后重试或直接发邮件至 2536986939@qq.com';
+    }
+    submitBtn.disabled = false;
+    submitBtn.textContent = '发送消息 ✉️';
+  });
   const langBtn = document.getElementById('langToggle');
   let isEN = false;
   langBtn.addEventListener('click', () => {
