@@ -440,6 +440,29 @@
     .project-desc { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
     .project-tags { display: flex; gap: 6px; flex-wrap: wrap; }
 
+    /* ── Contact Form ── */
+    .contact-form { width: 100%; max-width: 560px; margin: 0 auto 0; text-align: left; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .form-input, .form-textarea {
+      width: 100%; padding: 14px 18px;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; color: var(--text);
+      font-family: 'Space Grotesk', sans-serif; font-size: 14px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(124,106,255,0.15);
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--muted); }
+    .form-textarea { resize: vertical; margin-bottom: 12px; }
+    .form-submit { width: 100%; padding: 14px; font-size: 16px; border-radius: 12px; border: none; cursor: pointer; }
+    .form-status { margin-top: 12px; font-size: 14px; text-align: center; min-height: 20px; }
+    .form-status.success { color: var(--accent3); }
+    .form-status.error { color: var(--accent2); }
+    @media (max-width: 768px) { .form-row { grid-template-columns: 1fr; } }
+
     @media (max-width: 768px) {
       nav { padding: 16px 24px; }
       .nav-links { display: none; }
@@ -675,21 +698,20 @@
   <div class="reveal">
     <h2 class="contact-title">Let's build<br/>something.</h2>
     <p class="contact-sub">有想法想聊？或者只是想说声 hello？填写下面的表单，我会尽快回复你。</p>
-    <form class="contact-form" id="contactForm">
+    <form id="contactForm" class="contact-form">
       <div class="form-row">
-        <input class="form-input" type="text" name="name" placeholder="你的名字" required />
-        <input class="form-input" type="email" name="email" placeholder="邮箱地址" required />
+        <input type="text" name="from_name" placeholder="你的名字" required class="form-input" />
+        <input type="email" name="from_email" placeholder="你的邮箱" required class="form-input" />
       </div>
-      <input class="form-input" type="text" name="subject" placeholder="主题" />
-      <textarea class="form-textarea" name="message" placeholder="留下你想说的话..." required></textarea>
-      <button class="form-submit" type="submit" id="submitBtn">发送消息 ✉️</button>
-      <div class="form-status" id="formStatus"></div>
+      <textarea name="message" placeholder="想说什么？" required class="form-textarea" rows="5"></textarea>
+      <button type="submit" id="submitBtn" class="btn btn-primary form-submit">发送消息 ✉️</button>
+      <div id="formStatus" class="form-status"></div>
     </form>
-    <div class="social-row">
+    <div class="social-row" style="margin-top:48px;">
       <a href="#" class="social-btn" title="GitHub">⌨️</a>
       <a href="#" class="social-btn" title="Twitter">🐦</a>
       <a href="#" class="social-btn" title="LinkedIn">💼</a>
-      <a href="#" class="social-btn" title="WeChat">💬</a>
+      <a href="#" class="social-btn" title="Dribbble">🎨</a>
     </div>
   </div>
 </section>
@@ -699,6 +721,7 @@
   <p>// DESIGNED IN THE VOID, DEPLOYED TO THE WEB</p>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
   // ── Particle canvas ──
   const canvas = document.getElementById('bg-canvas');
@@ -804,7 +827,8 @@
 
   reveals.forEach(el => observer.observe(el));
 
-  // ── Contact Form ──
+  // ── Contact Form via EmailJS ──
+  emailjs.init('jGPf6iJ5dTwASI35O');
   const contactForm = document.getElementById('contactForm');
   const submitBtn = document.getElementById('submitBtn');
   const formStatus = document.getElementById('formStatus');
@@ -814,24 +838,15 @@
     submitBtn.disabled = true;
     submitBtn.textContent = '发送中...';
     formStatus.className = 'form-status';
-
-    const data = new FormData(contactForm);
+    formStatus.textContent = '';
     try {
-      const res = await fetch('https://formspree.io/f/xpwrjqoy', {
-        method: 'POST',
-        body: data,
-        headers: { 'Accept': 'application/json' }
-      });
-      if (res.ok) {
-        formStatus.className = 'form-status success';
-        formStatus.textContent = '✓ 消息已发送！我会尽快回复你。';
-        contactForm.reset();
-      } else {
-        throw new Error('发送失败');
-      }
-    } catch {
+      await emailjs.sendForm('service_k5znwhi', 'template_zfpae2h', contactForm);
+      formStatus.className = 'form-status success';
+      formStatus.textContent = '✓ 消息已发送！我会尽快回复你。';
+      contactForm.reset();
+    } catch (err) {
       formStatus.className = 'form-status error';
-      formStatus.textContent = '✗ 发送失败，请稍后重试或直接发邮件至 2536986939@qq.com';
+      formStatus.textContent = '✗ 发送失败，请稍后重试。';
     }
     submitBtn.disabled = false;
     submitBtn.textContent = '发送消息 ✉️';
